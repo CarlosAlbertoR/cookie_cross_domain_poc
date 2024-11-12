@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Account</title>
+  </head>
+  <body>
+    <h1>My Account</h1>
+    <button id="loginButton">Login</button>
+    <button id="navigateButton">Go to Checkout</button>
+    <script type="module" src="./login.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const navigateButton = document.querySelector("button#navigateButton");
+        if (navigateButton) {
+          navigateButton.addEventListener("click", () => {
+            window.location.href = "http://checkout.localhost:3000/";
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
