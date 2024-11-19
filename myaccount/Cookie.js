@@ -4,32 +4,23 @@ export default class Cookie {
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         const expires = `expires=${date.toUTCString()}`;
 
-        // Configurar SameSite=None y Secure si HTTPS
+        // Configurar el dominio para que sea accesible en todos los subdominios
+        let domain = '';
+        if (location.hostname.includes('localhost')) {
+            domain = '; domain=localhost';
+        } else {
+            domain = `; domain=.${location.hostname.split('.').slice(-2).join('.')}`;
+        }
+
+        // Solo agrega SameSite=None si no estás en localhost y si estás usando HTTPS
         const sameSite = location.protocol === 'https:' ? '; SameSite=None; Secure' : '';
 
-        // Configurar la cookie en el subdominio checkout
-        let domain = 'checkout-n13j.onrender.com';
-        let cookieString = `${name}=${value}; ${expires}; path=/; domain=${domain}${sameSite}`;
-        console.log("Configurando cookie en el subdominio checkout:", cookieString);
+        // Configurar la cookie
+        const cookieString = `${name}=${value}; ${expires}; path=/${domain}${sameSite}`;
+        console.log("Configurando cookie:", cookieString);
 
-        try {
-            document.cookie = cookieString;
-            console.log("Cookie establecida en el subdominio checkout:", document.cookie);
-        } catch (error) {
-            console.error("Error configurando la cookie en el subdominio checkout:", error);
-        }
-
-        // Configurar la cookie en el subdominio myaccount
-        domain = 'myaccount-09w5.onrender.com';
-        cookieString = `${name}=${value}; ${expires}; path=/; domain=${domain}${sameSite}`;
-        console.log("Configurando cookie en el subdominio myaccount:", cookieString);
-
-        try {
-            document.cookie = cookieString;
-            console.log("Cookie establecida en el subdominio myaccount:", document.cookie);
-        } catch (error) {
-            console.error("Error configurando la cookie en el subdominio myaccount:", error);
-        }
+        document.cookie = cookieString;
+        console.log("Cookie establecida:", document.cookie);
     }
 
     static get(name) {
