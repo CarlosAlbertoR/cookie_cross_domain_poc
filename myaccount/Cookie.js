@@ -4,14 +4,10 @@ export default class Cookie {
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         const expires = `expires=${date.toUTCString()}`;
 
-        let domain = '';
-        console.log('location.hostname', location.hostname);
+        // Configura el dominio como el dominio raíz común para Render
+        const domain = '; domain=.onrender.com';
 
-        if (!location.hostname.includes('localhost')) {
-            domain = `; domain=.${location.hostname}`;
-        }
-
-        // Solo agrega SameSite=None si no estás en localhost y si estás usando HTTPS
+        // Configura SameSite y Secure si estás usando HTTPS
         const sameSite = location.protocol === 'https:' ? '; SameSite=None; Secure' : '';
 
         // Configurar la cookie
