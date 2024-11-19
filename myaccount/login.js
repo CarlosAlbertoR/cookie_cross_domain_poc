@@ -3,7 +3,7 @@ import Cookie from "./Cookie.js";
 // Simular inicio de sesión
 function login() {
     const authToken = "user-authentication-token";
-    Cookie.set('test', authToken, 1);
+    Cookie.set('authToken', authToken, 1);
     alert("User logged in and cookie set!");
 }
 
