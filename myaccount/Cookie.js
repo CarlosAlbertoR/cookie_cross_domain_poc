@@ -4,26 +4,33 @@ export default class Cookie {
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         const expires = `expires=${date.toUTCString()}`;
 
-        // Configura el dominio como el dominio raíz común para Render
-        const domain = '; domain=.onrender.com';
+        // Configuración del dominio para Render
+        let domain = '';
+        if (location.hostname.endsWith('.onrender.com')) {
+            domain = '; domain=.onrender.com'; // Solo el dominio base, sin subdominios ni esquemas
+        }
 
-        // Configura SameSite y Secure si estás usando HTTPS
+        // Solo agrega SameSite=None y Secure si se usa HTTPS
         const sameSite = location.protocol === 'https:' ? '; SameSite=None; Secure' : '';
 
-        // Configurar la cookie
+        // Construcción de la cookie
         const cookieString = `${name}=${value}; ${expires}; path=/${domain}${sameSite}`;
         console.log("Configurando cookie:", cookieString);
 
-        document.cookie = cookieString;
-        console.log("Cookie establecida:", document.cookie);
+        try {
+            document.cookie = cookieString;
+            console.log("Cookie establecida:", document.cookie);
+        } catch (error) {
+            console.error("Error configurando la cookie:", error);
+        }
     }
 
     static get(name) {
-        const nameEQ = name + "=";
-        const ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i].trim();
-            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        const nameEQ = `${name}=`;
+        const cookies = document.cookie.split(';');
+        for (let cookie of cookies) {
+            let c = cookie.trim();
+            if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length);
         }
         return null;
     }
