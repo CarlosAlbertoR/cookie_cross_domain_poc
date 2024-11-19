@@ -1,35 +1,19 @@
 export default class Cookie {
     static set(name, value, days = 1) {
         const date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000)); // Expiry in days
         const expires = `expires=${date.toUTCString()}`;
 
-        // Solo agrega SameSite=None si no estás en localhost y si estás usando HTTPS
-        const sameSite = location.protocol === 'https:' ? '; SameSite=None; Secure' : '';
+        // Explicitly define domain for cross-subdomain sharing
+        const domain = '.onrender.com'; // Ensure this matches the shared root domain
+        const sameSite = '; SameSite=None; Secure'; // Required for cross-site cookies in HTTPS
+        const path = '; path=/'; // Accessible across the entire subdomain
 
-        // Configurar la cookie en el subdominio checkout
-        let domain = 'checkout-n13j.onrender.com';
-        let cookieString = `${name}=${value}; ${expires}; path=/; domain=${domain}${sameSite}`;
-        console.log("Configurando cookie en el subdominio checkout:", cookieString);
+        // Create and set the cookie
+        const cookieString = `${name}=${value}; ${expires}; domain=${domain}${sameSite}${path}`;
+        document.cookie = cookieString;
 
-        try {
-            document.cookie = cookieString;
-            console.log("Cookie establecida en el subdominio checkout:", document.cookie);
-        } catch (error) {
-            console.error("Error configurando la cookie en el subdominio checkout:", error);
-        }
-
-        // Configurar la cookie en el subdominio myaccount
-        domain = 'myaccount-09w5.onrender.com';
-        cookieString = `${name}=${value}; ${expires}; path=/; domain=${domain}${sameSite}`;
-        console.log("Configurando cookie en el subdominio myaccount:", cookieString);
-
-        try {
-            document.cookie = cookieString;
-            console.log("Cookie establecida en el subdominio myaccount:", document.cookie);
-        } catch (error) {
-            console.error("Error configurando la cookie en el subdominio myaccount:", error);
-        }
+        console.log("Cookie set:", cookieString);
     }
 
     static get(name) {
@@ -43,6 +27,6 @@ export default class Cookie {
     }
 
     static erase(name) {
-        this.set(name, '', -1);
+        this.set(name, '', -1); // Set cookie expiry to past
     }
 }
