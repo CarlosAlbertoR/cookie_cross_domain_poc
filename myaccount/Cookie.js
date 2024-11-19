@@ -5,7 +5,7 @@ export default class Cookie {
         const expires = `expires=${date.toUTCString()}`;
 
         // Explicitly define domain for cross-subdomain sharing
-        const domain = '.onrender.com'; // Ensure this matches the shared root domain
+        const domain = '.cross-subdomain-poc.online'; // Ensure this matches the shared root domain
         const sameSite = '; SameSite=None; Secure'; // Required for cross-site cookies in HTTPS
         const path = '; path=/'; // Accessible across the entire subdomain
 
