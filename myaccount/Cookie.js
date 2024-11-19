@@ -4,24 +4,31 @@ export default class Cookie {
         date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
         const expires = `expires=${date.toUTCString()}`;
 
-        // Configuración del dominio para Render
-        let domain = '';
-        if (location.hostname.endsWith('.onrender.com')) {
-            domain = '; domain=.onrender.com'; // Solo el dominio base, sin subdominios ni esquemas
-        }
-
-        // Solo agrega SameSite=None y Secure si se usa HTTPS
+        // Configurar SameSite=None y Secure si HTTPS
         const sameSite = location.protocol === 'https:' ? '; SameSite=None; Secure' : '';
 
-        // Construcción de la cookie
-        const cookieString = `${name}=${value}; ${expires}; path=/${domain}${sameSite}`;
-        console.log("Configurando cookie:", cookieString);
+        // Configurar la cookie en el subdominio checkout
+        let domain = 'checkout-n13j.onrender.com';
+        let cookieString = `${name}=${value}; ${expires}; path=/; domain=${domain}${sameSite}`;
+        console.log("Configurando cookie en el subdominio checkout:", cookieString);
 
         try {
             document.cookie = cookieString;
-            console.log("Cookie establecida:", document.cookie);
+            console.log("Cookie establecida en el subdominio checkout:", document.cookie);
         } catch (error) {
-            console.error("Error configurando la cookie:", error);
+            console.error("Error configurando la cookie en el subdominio checkout:", error);
+        }
+
+        // Configurar la cookie en el subdominio myaccount
+        domain = 'myaccount-09w5.onrender.com';
+        cookieString = `${name}=${value}; ${expires}; path=/; domain=${domain}${sameSite}`;
+        console.log("Configurando cookie en el subdominio myaccount:", cookieString);
+
+        try {
+            document.cookie = cookieString;
+            console.log("Cookie establecida en el subdominio myaccount:", document.cookie);
+        } catch (error) {
+            console.error("Error configurando la cookie en el subdominio myaccount:", error);
         }
     }
 
