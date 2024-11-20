@@ -2,7 +2,10 @@ import Cookie from "./Cookie.js";
 
 // Simular inicio de sesión
 function login() {
-    const authToken = "user-authentication-token";
+    const tokenInput = document.querySelector("#tokenInput");
+    const authToken = tokenInput ? tokenInput.value : "default-token-value";
+    console.log('authToken', authToken);
+
     Cookie.set('authToken', authToken, 1);
     alert("User logged in and cookie set!");
 }
@@ -10,13 +13,7 @@ function login() {
 // Añadir el event listener al botón de login
 document.addEventListener("DOMContentLoaded", () => {
     const loginButton = document.querySelector("button#loginButton");
-
-    // Asegurarse de que el botón esté disponible antes de añadir el listener
-    setTimeout(() => {
-        if (loginButton) {
-            loginButton.addEventListener("click", login);
-        } else {
-            console.error("Login button not found.");
-        }
-    }, 1000);
+    if (loginButton) {
+        loginButton.addEventListener("click", login);
+    }
 });
